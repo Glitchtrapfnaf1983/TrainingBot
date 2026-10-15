@@ -1,5 +1,7 @@
 package frc.robot.subsystems.simpleArm;
 
+import static edu.wpi.first.units.Units.Rotations;
+
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,8 +19,9 @@ public class SimpleArm extends SubsystemBase {
         motor.withConfig(LoggedTalonFX.buildStandardConfig(80, 40));
     }
 
-    public Command spinFowardCommand() {
-        return startEnd(() -> motor.setControl(out.withOutput(0.5)), () -> motor.setControl(out.withOutput(0)));
+    public Command spinAtspeedCommand(double speed) {
+        return startEnd(() -> motor.setControl(out.withOutput(0.5)), () -> motor.setControl(out.withOutput(0)))
+                .until(() -> motor.getPosition().in(Rotations) >= 0.09);
     }
 
     @Override
